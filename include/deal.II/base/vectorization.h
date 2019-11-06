@@ -212,7 +212,7 @@ public:
   end()
   {
     return VectorizedArrayIterator<T>(static_cast<T &>(*this),
-                                      T::n_array_elements);
+                                      T::size());
   }
 
   /**
@@ -223,7 +223,7 @@ public:
   end() const
   {
     return VectorizedArrayIterator<const T>(static_cast<const T &>(*this),
-                                            T::n_array_elements);
+                                            T::size());
   }
 };
 
@@ -515,7 +515,7 @@ public:
    * This operation corresponds to the following code (but uses a more
    * efficient implementation in case the hardware allows for that):
    * @code
-   * for (unsigned int v=0; v<VectorizedArray<Number>::n_array_elements; ++v)
+   * for (unsigned int v=0; v<VectorizedArray<Number>::size(); ++v)
    *   this->operator[](v) = base_ptr[offsets[v]];
    * @endcode
    */
@@ -534,7 +534,7 @@ public:
    * This operation corresponds to the following code (but uses a more
    * efficient implementation in case the hardware allows for that):
    * @code
-   * for (unsigned int v=0; v<VectorizedArray<Number>::n_array_elements; ++v)
+   * for (unsigned int v=0; v<VectorizedArray<Number>::size(); ++v)
    *   base_ptr[offsets[v]] = this->operator[](v);
    * @endcode
    */
@@ -664,11 +664,11 @@ template <typename VectorizedArrayType>
 inline DEAL_II_ALWAYS_INLINE VectorizedArrayType
                              make_vectorized_array(const typename VectorizedArrayType::value_type &u)
 {
-  static_assert(
-    std::is_same<VectorizedArrayType,
-                 VectorizedArray<typename VectorizedArrayType::value_type,
-                                 VectorizedArrayType::n_array_elements>>::value,
-    "VectorizedArrayType is not a VectorizedArray.");
+//  static_assert(
+//    std::is_same<VectorizedArrayType,
+//                 VectorizedArray<typename VectorizedArrayType::value_type,
+//                                 VectorizedArrayType::size()>>::value,
+//    "VectorizedArrayType is not a VectorizedArray.");
 
   VectorizedArrayType result = u;
   return result;
@@ -677,7 +677,7 @@ inline DEAL_II_ALWAYS_INLINE VectorizedArrayType
 
 
 /**
- * This method loads VectorizedArray::n_array_elements data streams from the
+ * This method loads VectorizedArray::size() data streams from the
  * given array @p in. The offsets to the input array are given by the array @p
  * offsets. From each stream, n_entries are read. The data is then transposed
  * and stored it into an array of VectorizedArray type. The output array @p
@@ -691,7 +691,7 @@ inline DEAL_II_ALWAYS_INLINE VectorizedArrayType
  *
  * @code
  * for (unsigned int i=0; i<n_entries; ++i)
- *   for (unsigned int v=0; v<VectorizedArray<Number>::n_array_elements; ++v)
+ *   for (unsigned int v=0; v<VectorizedArray<Number>::size(); ++v)
  *     out[i][v] = in[offsets[v]+i];
  * @endcode
  *
@@ -710,7 +710,7 @@ vectorized_load_and_transpose(const unsigned int              n_entries,
 {
   for (unsigned int i = 0; i < n_entries; ++i)
     for (unsigned int v = 0;
-         v < VectorizedArray<Number, width>::n_array_elements;
+         v < VectorizedArray<Number, width>::size();
          ++v)
       out[i][v] = in[offsets[v] + i];
 }
@@ -737,7 +737,7 @@ vectorized_load_and_transpose(const unsigned int              n_entries,
  *
  * @code
  * for (unsigned int i=0; i<n_entries; ++i)
- *   for (unsigned int v=0; v<VectorizedArray<Number>::n_array_elements; ++v)
+ *   for (unsigned int v=0; v<VectorizedArray<Number>::size(); ++v)
  *     out[offsets[v]+i] = in[i][v];
  * @endcode
  *
@@ -745,7 +745,7 @@ vectorized_load_and_transpose(const unsigned int              n_entries,
  * action:
  * @code
  * for (unsigned int i=0; i<n_entries; ++i)
- *   for (unsigned int v=0; v<VectorizedArray<Number>::n_array_elements; ++v)
+ *   for (unsigned int v=0; v<VectorizedArray<Number>::size(); ++v)
  *     out[offsets[v]+i] += in[i][v];
  * @endcode
  *
@@ -766,13 +766,13 @@ vectorized_transpose_and_store(const bool                            add_into,
   if (add_into)
     for (unsigned int i = 0; i < n_entries; ++i)
       for (unsigned int v = 0;
-           v < VectorizedArray<Number, width>::n_array_elements;
+           v < VectorizedArray<Number, width>::size();
            ++v)
         out[offsets[v] + i] += in[i][v];
   else
     for (unsigned int i = 0; i < n_entries; ++i)
       for (unsigned int v = 0;
-           v < VectorizedArray<Number, width>::n_array_elements;
+           v < VectorizedArray<Number, width>::size();
            ++v)
         out[offsets[v] + i] = in[i][v];
 }
@@ -959,7 +959,7 @@ public:
    * This operation corresponds to the following code (but uses a more
    * efficient implementation in case the hardware allows for that):
    * @code
-   * for (unsigned int v=0; v<VectorizedArray<Number>::n_array_elements; ++v)
+   * for (unsigned int v=0; v<VectorizedArray<Number>::size(); ++v)
    *   this->operator[](v) = base_ptr[offsets[v]];
    * @endcode
    */
@@ -984,7 +984,7 @@ public:
    * This operation corresponds to the following code (but uses a more
    * efficient implementation in case the hardware allows for that):
    * @code
-   * for (unsigned int v=0; v<VectorizedArray<Number>::n_array_elements; ++v)
+   * for (unsigned int v=0; v<VectorizedArray<Number>::size(); ++v)
    *   base_ptr[offsets[v]] = this->operator[](v);
    * @endcode
    */
@@ -1394,7 +1394,7 @@ public:
    * This operation corresponds to the following code (but uses a more
    * efficient implementation in case the hardware allows for that):
    * @code
-   * for (unsigned int v=0; v<VectorizedArray<Number>::n_array_elements; ++v)
+   * for (unsigned int v=0; v<VectorizedArray<Number>::size(); ++v)
    *   this->operator[](v) = base_ptr[offsets[v]];
    * @endcode
    */
@@ -1419,7 +1419,7 @@ public:
    * This operation corresponds to the following code (but uses a more
    * efficient implementation in case the hardware allows for that):
    * @code
-   * for (unsigned int v=0; v<VectorizedArray<Number>::n_array_elements; ++v)
+   * for (unsigned int v=0; v<VectorizedArray<Number>::size(); ++v)
    *   base_ptr[offsets[v]] = this->operator[](v);
    * @endcode
    */
@@ -1880,7 +1880,7 @@ public:
    * This operation corresponds to the following code (but uses a more
    * efficient implementation in case the hardware allows for that):
    * @code
-   * for (unsigned int v=0; v<VectorizedArray<Number>::n_array_elements; ++v)
+   * for (unsigned int v=0; v<VectorizedArray<Number>::size(); ++v)
    *   this->operator[](v) = base_ptr[offsets[v]];
    * @endcode
    */
@@ -1910,7 +1910,7 @@ public:
    * This operation corresponds to the following code (but uses a more
    * efficient implementation in case the hardware allows for that):
    * @code
-   * for (unsigned int v=0; v<VectorizedArray<Number>::n_array_elements; ++v)
+   * for (unsigned int v=0; v<VectorizedArray<Number>::size(); ++v)
    *   base_ptr[offsets[v]] = this->operator[](v);
    * @endcode
    */
@@ -2284,7 +2284,7 @@ public:
    * This operation corresponds to the following code (but uses a more
    * efficient implementation in case the hardware allows for that):
    * @code
-   * for (unsigned int v=0; v<VectorizedArray<Number>::n_array_elements; ++v)
+   * for (unsigned int v=0; v<VectorizedArray<Number>::size(); ++v)
    *   this->operator[](v) = base_ptr[offsets[v]];
    * @endcode
    */
@@ -2314,7 +2314,7 @@ public:
    * This operation corresponds to the following code (but uses a more
    * efficient implementation in case the hardware allows for that):
    * @code
-   * for (unsigned int v=0; v<VectorizedArray<Number>::n_array_elements; ++v)
+   * for (unsigned int v=0; v<VectorizedArray<Number>::size(); ++v)
    *   base_ptr[offsets[v]] = this->operator[](v);
    * @endcode
    */
@@ -2705,7 +2705,7 @@ public:
    * This operation corresponds to the following code (but uses a more
    * efficient implementation in case the hardware allows for that):
    * @code
-   * for (unsigned int v=0; v<VectorizedArray<Number>::n_array_elements; ++v)
+   * for (unsigned int v=0; v<VectorizedArray<Number>::size(); ++v)
    *   this->operator[](v) = base_ptr[offsets[v]];
    * @endcode
    */
@@ -2725,7 +2725,7 @@ public:
    * This operation corresponds to the following code (but uses a more
    * efficient implementation in case the hardware allows for that):
    * @code
-   * for (unsigned int v=0; v<VectorizedArray<Number>::n_array_elements; ++v)
+   * for (unsigned int v=0; v<VectorizedArray<Number>::size(); ++v)
    *   base_ptr[offsets[v]] = this->operator[](v);
    * @endcode
    */
@@ -3069,7 +3069,7 @@ public:
    * This operation corresponds to the following code (but uses a more
    * efficient implementation in case the hardware allows for that):
    * @code
-   * for (unsigned int v=0; v<VectorizedArray<Number>::n_array_elements; ++v)
+   * for (unsigned int v=0; v<VectorizedArray<Number>::size(); ++v)
    *   this->operator[](v) = base_ptr[offsets[v]];
    * @endcode
    */
@@ -3089,7 +3089,7 @@ public:
    * This operation corresponds to the following code (but uses a more
    * efficient implementation in case the hardware allows for that):
    * @code
-   * for (unsigned int v=0; v<VectorizedArray<Number>::n_array_elements; ++v)
+   * for (unsigned int v=0; v<VectorizedArray<Number>::size(); ++v)
    *   base_ptr[offsets[v]] = this->operator[](v);
    * @endcode
    */
@@ -3774,7 +3774,7 @@ inline DEAL_II_ALWAYS_INLINE bool
 operator==(const VectorizedArray<Number, width> &lhs,
            const VectorizedArray<Number, width> &rhs)
 {
-  for (unsigned int i = 0; i < VectorizedArray<Number, width>::n_array_elements;
+  for (unsigned int i = 0; i < VectorizedArray<Number, width>::size();
        ++i)
     if (lhs[i] != rhs[i])
       return false;
@@ -4110,7 +4110,7 @@ template <typename Number, int width>
 inline std::ostream &
 operator<<(std::ostream &out, const VectorizedArray<Number, width> &p)
 {
-  constexpr unsigned int n = VectorizedArray<Number, width>::n_array_elements;
+  constexpr unsigned int n = VectorizedArray<Number, width>::size();
   for (unsigned int i = 0; i < n - 1; ++i)
     out << p[i] << ' ';
   out << p[n - 1];
@@ -4450,9 +4450,9 @@ namespace std
     // setting the individual elements and also circumvents a compiler
     // optimization bug in gcc-4.6 with SSE2 (see also deal.II developers list
     // from April 2014, topic "matrix_free/step-48 Test").
-    Number values[::dealii::VectorizedArray<Number, width>::n_array_elements];
+    Number values[::dealii::VectorizedArray<Number, width>::size()];
     for (unsigned int i = 0;
-         i < dealii::VectorizedArray<Number, width>::n_array_elements;
+         i < dealii::VectorizedArray<Number, width>::size();
          ++i)
       values[i] = std::sin(x[i]);
     ::dealii::VectorizedArray<Number, width> out;
@@ -4473,9 +4473,9 @@ namespace std
   inline ::dealii::VectorizedArray<Number, width>
   cos(const ::dealii::VectorizedArray<Number, width> &x)
   {
-    Number values[::dealii::VectorizedArray<Number, width>::n_array_elements];
+    Number values[::dealii::VectorizedArray<Number, width>::size()];
     for (unsigned int i = 0;
-         i < dealii::VectorizedArray<Number, width>::n_array_elements;
+         i < dealii::VectorizedArray<Number, width>::size();
          ++i)
       values[i] = std::cos(x[i]);
     ::dealii::VectorizedArray<Number, width> out;
@@ -4496,9 +4496,9 @@ namespace std
   inline ::dealii::VectorizedArray<Number, width>
   tan(const ::dealii::VectorizedArray<Number, width> &x)
   {
-    Number values[::dealii::VectorizedArray<Number, width>::n_array_elements];
+    Number values[::dealii::VectorizedArray<Number, width>::size()];
     for (unsigned int i = 0;
-         i < dealii::VectorizedArray<Number, width>::n_array_elements;
+         i < dealii::VectorizedArray<Number, width>::size();
          ++i)
       values[i] = std::tan(x[i]);
     ::dealii::VectorizedArray<Number, width> out;
@@ -4519,9 +4519,9 @@ namespace std
   inline ::dealii::VectorizedArray<Number, width>
   exp(const ::dealii::VectorizedArray<Number, width> &x)
   {
-    Number values[::dealii::VectorizedArray<Number, width>::n_array_elements];
+    Number values[::dealii::VectorizedArray<Number, width>::size()];
     for (unsigned int i = 0;
-         i < dealii::VectorizedArray<Number, width>::n_array_elements;
+         i < dealii::VectorizedArray<Number, width>::size();
          ++i)
       values[i] = std::exp(x[i]);
     ::dealii::VectorizedArray<Number, width> out;
@@ -4542,9 +4542,9 @@ namespace std
   inline ::dealii::VectorizedArray<Number, width>
   log(const ::dealii::VectorizedArray<Number, width> &x)
   {
-    Number values[::dealii::VectorizedArray<Number, width>::n_array_elements];
+    Number values[::dealii::VectorizedArray<Number, width>::size()];
     for (unsigned int i = 0;
-         i < dealii::VectorizedArray<Number, width>::n_array_elements;
+         i < dealii::VectorizedArray<Number, width>::size();
          ++i)
       values[i] = std::log(x[i]);
     ::dealii::VectorizedArray<Number, width> out;
@@ -4581,9 +4581,9 @@ namespace std
   inline ::dealii::VectorizedArray<Number, width>
   pow(const ::dealii::VectorizedArray<Number, width> &x, const Number p)
   {
-    Number values[::dealii::VectorizedArray<Number, width>::n_array_elements];
+    Number values[::dealii::VectorizedArray<Number, width>::size()];
     for (unsigned int i = 0;
-         i < dealii::VectorizedArray<Number, width>::n_array_elements;
+         i < dealii::VectorizedArray<Number, width>::size();
          ++i)
       values[i] = std::pow(x[i], p);
     ::dealii::VectorizedArray<Number, width> out;

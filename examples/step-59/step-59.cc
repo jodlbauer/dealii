@@ -819,7 +819,7 @@ namespace Step59
           for (unsigned int e = 0; e < dim; ++e)
             if (d != e)
               for (unsigned int v = 0;
-                   v < VectorizedArray<number>::n_array_elements;
+                   v < VectorizedArray<number>::size();
                    ++v)
                 AssertThrow(inverse_jacobian[d][e][v] == 0.,
                             ExcNotImplemented());
@@ -1085,7 +1085,7 @@ namespace Step59
             Point<dim, VectorizedArray<double>> point_batch =
               phi.quadrature_point(q);
             for (unsigned int v = 0;
-                 v < VectorizedArray<double>::n_array_elements;
+                 v < VectorizedArray<double>::size();
                  ++v)
               {
                 Point<dim> single_point;
@@ -1144,7 +1144,7 @@ namespace Step59
               phi_face.quadrature_point(q);
 
             for (unsigned int v = 0;
-                 v < VectorizedArray<double>::n_array_elements;
+                 v < VectorizedArray<double>::size();
                  ++v)
               {
                 Point<dim> single_point;

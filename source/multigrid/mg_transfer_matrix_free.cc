@@ -125,7 +125,7 @@ MGTransferMatrixFree<dim, Number>::build(const DoFHandler<dim, dim> &mg_dof)
     prolongation_matrix_1d[i] = elem_info.prolongation_matrix_1d[i];
 
   // reshuffle into aligned vector of vectorized arrays
-  const unsigned int vec_size = VectorizedArray<Number>::n_array_elements;
+  const unsigned int vec_size = VectorizedArray<Number>::size();
   const unsigned int n_levels = mg_dof.get_triangulation().n_global_levels();
 
   const unsigned int n_weights_per_cell = Utilities::fixed_power<dim>(3);
@@ -348,7 +348,7 @@ MGTransferMatrixFree<dim, Number>::do_prolongate_add(
   LinearAlgebra::distributed::Vector<Number> &      dst,
   const LinearAlgebra::distributed::Vector<Number> &src) const
 {
-  const unsigned int vec_size    = VectorizedArray<Number>::n_array_elements;
+  const unsigned int vec_size    = VectorizedArray<Number>::size();
   const unsigned int degree_size = (degree > -1 ? degree : fe_degree) + 1;
   const unsigned int n_child_dofs_1d = 2 * degree_size - element_is_continuous;
   const unsigned int n_scalar_cell_dofs =
@@ -487,7 +487,7 @@ MGTransferMatrixFree<dim, Number>::do_restrict_add(
   LinearAlgebra::distributed::Vector<Number> &      dst,
   const LinearAlgebra::distributed::Vector<Number> &src) const
 {
-  const unsigned int vec_size    = VectorizedArray<Number>::n_array_elements;
+  const unsigned int vec_size    = VectorizedArray<Number>::size();
   const unsigned int degree_size = (degree > -1 ? degree : fe_degree) + 1;
   const unsigned int n_child_dofs_1d = 2 * degree_size - element_is_continuous;
   const unsigned int n_scalar_cell_dofs =

@@ -780,7 +780,7 @@ MappingQGeneric<dim, spacedim>::InternalData::initialize(
               const unsigned int max_size =
                 std::max(n_q_points, n_shape_values);
               const unsigned int vec_length =
-                dealii::VectorizedArray<double>::n_array_elements;
+                dealii::VectorizedArray<double>::size();
               const unsigned int n_comp = 1 + (spacedim - 1) / vec_length;
 
               scratch.resize((dim - 1) * max_size);
@@ -810,7 +810,7 @@ MappingQGeneric<dim, spacedim>::InternalData::initialize_face(
       const unsigned int n_shape_values = fe.n_dofs_per_cell();
       const unsigned int n_q_points     = q.size();
       const unsigned int max_size       = std::max(n_q_points, n_shape_values);
-      const unsigned int vec_length = VectorizedArray<double>::n_array_elements;
+      const unsigned int vec_length = VectorizedArray<double>::size();
       const unsigned int n_comp     = 1 + (spacedim - 1) / vec_length;
 
       scratch.resize((dim - 1) * max_size);
@@ -1530,7 +1530,7 @@ namespace internal
         const unsigned int n_shape_values = data.n_shape_functions;
         const unsigned int n_q_points     = data.shape_info.n_q_points;
         const unsigned int vec_length =
-          VectorizedArray<double>::n_array_elements;
+          VectorizedArray<double>::size();
         const unsigned int n_comp     = 1 + (spacedim - 1) / vec_length;
         const unsigned int n_hessians = (dim * (dim + 1)) / 2;
 

@@ -155,7 +155,7 @@ namespace Step48
             // width)
             if (q == 0)
               for (unsigned int v = 0;
-                   v < VectorizedArray<double>::n_array_elements;
+                   v < VectorizedArray<double>::size();
                    ++v)
                 deallog << submit_value[v] << " = " << simple_value[v] << " - "
                         << sin_value[v] << std::endl;

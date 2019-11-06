@@ -273,7 +273,7 @@ namespace internal
     MappingInfo<dim, Number, VectorizedArrayType>::initialize(
       const dealii::Triangulation<dim> &                        tria,
       const std::vector<std::pair<unsigned int, unsigned int>> &cells,
-      const FaceInfo<VectorizedArrayType::n_array_elements> &   face_info,
+      const FaceInfo<VectorizedArrayType::size()> &   face_info,
       const std::vector<unsigned int> &                         active_fe_index,
       const Mapping<dim> &                                      mapping,
       const std::vector<dealii::hp::QCollection<1>> &           quad,
@@ -330,7 +330,7 @@ namespace internal
         std::map<
           Tensor<2,
                  dim,
-                 Tensor<1, VectorizedArrayType::n_array_elements, Number>>,
+                 Tensor<1, VectorizedArrayType::size(), Number>>,
           unsigned int,
           FPArrayComparator<Number, VectorizedArrayType>>
           data;
@@ -390,7 +390,7 @@ namespace internal
         const std::pair<unsigned int, unsigned int> *cells,
         const unsigned int                           my_q,
         GeometryType &                               cell_t_prev,
-        GeometryType (&cell_t)[VectorizedArrayType::n_array_elements],
+        GeometryType (&cell_t)[VectorizedArrayType::size()],
         dealii::FEValues<dim, dim> &                 fe_val,
         LocalData<dim, Number, VectorizedArrayType> &cell_data)
       {
@@ -403,7 +403,7 @@ namespace internal
         // not have that field here)
         const double zero_tolerance_double =
           cell_data.jac_size * std::numeric_limits<double>::epsilon() * 1024.;
-        for (unsigned int j = 0; j < VectorizedArrayType::n_array_elements; ++j)
+        for (unsigned int j = 0; j < VectorizedArrayType::size(); ++j)
           {
             typename dealii::Triangulation<dim>::cell_iterator cell_it(
               &tria, cells[j].first, cells[j].second);
@@ -565,10 +565,10 @@ namespace internal
                             jacobian_grad[d][e][f];
                   }
               }
-          } // end loop over entries of vectorization (n_array_elements cells)
+          } // end loop over entries of vectorization (size() cells)
 
         // set information for next cell
-        cell_t_prev = cell_t[VectorizedArrayType::n_array_elements - 1];
+        cell_t_prev = cell_t[VectorizedArrayType::size() - 1];
       }
 
 
@@ -611,7 +611,7 @@ namespace internal
         // encodes the cell types of the current cell. Since several cells
         // must be considered together, this variable holds the individual
         // info of the last chunk of cells
-        GeometryType cell_t[VectorizedArrayType::n_array_elements];
+        GeometryType cell_t[VectorizedArrayType::size()];
         GeometryType cell_t_prev = general;
 
         // fe_values object that is used to compute the mapping data. for
@@ -691,7 +691,7 @@ namespace internal
 
               evaluate_on_cell<dim, Number, VectorizedArrayType>(
                 tria,
-                &cells[cell * VectorizedArrayType::n_array_elements],
+                &cells[cell * VectorizedArrayType::size()],
                 my_q,
                 cell_t_prev,
                 cell_t,
@@ -709,7 +709,7 @@ namespace internal
                   // (general cell))
                   GeometryType most_general_type = cartesian;
                   for (unsigned int j = 0;
-                       j < VectorizedArrayType::n_array_elements;
+                       j < VectorizedArrayType::size();
                        ++j)
                     if (cell_t[j] > most_general_type)
                       most_general_type = cell_t[j];
@@ -737,7 +737,7 @@ namespace internal
                         Tensor<2,
                                dim,
                                Tensor<1,
-                                      VectorizedArrayType::n_array_elements,
+                                      VectorizedArrayType::size(),
                                       Number>>,
                         unsigned int>
                         new_entry;
@@ -748,7 +748,7 @@ namespace internal
                       for (unsigned int d = 0; d < dim; ++d)
                         for (unsigned int e = 0; e < dim; ++e)
                           for (unsigned int v = 0;
-                               v < VectorizedArrayType::n_array_elements;
+                               v < VectorizedArrayType::size();
                                ++v)
                             new_entry.first[d][e][v] =
                               cell_data.const_jac[d][e][v];
@@ -774,7 +774,7 @@ namespace internal
                       Tensor<3, dim, VectorizedArrayType> &jacobian_grad =
                         cell_data.general_jac_grad[q];
                       for (unsigned int j = 0;
-                           j < VectorizedArrayType::n_array_elements;
+                           j < VectorizedArrayType::size();
                            ++j)
                         if (cell_t[j] < general)
                           {
@@ -1026,7 +1026,7 @@ namespace internal
       const unsigned int n_quads = quad.size();
       const unsigned int n_cells = cells.size();
       const unsigned int vectorization_width =
-        VectorizedArrayType::n_array_elements;
+        VectorizedArrayType::size();
       Assert(n_cells % vectorization_width == 0, ExcInternalError());
       const unsigned int n_macro_cells = n_cells / vectorization_width;
       cell_data.resize(n_quads);
@@ -1164,7 +1164,7 @@ namespace internal
                   for (unsigned int d = 0; d < dim; ++d)
                     for (unsigned int e = 0; e < dim; ++e)
                       for (unsigned int v = 0;
-                           v < VectorizedArrayType::n_array_elements;
+                           v < VectorizedArrayType::size();
                            ++v)
                         jac[d][e][v] = it.first[d][e][v];
                   AssertIndexRange(it.second, n_constant_jacobians);
@@ -1220,7 +1220,7 @@ namespace internal
         std::map<
           Tensor<1,
                  2 * dim * dim + dim + 1,
-                 Tensor<1, VectorizedArrayType::n_array_elements, Number>>,
+                 Tensor<1, VectorizedArrayType::size(), Number>>,
           unsigned int,
           FPArrayComparator<Number, VectorizedArrayType>>
           data;
@@ -1269,7 +1269,7 @@ namespace internal
         const dealii::Triangulation<dim> &                        tria,
         const std::vector<std::pair<unsigned int, unsigned int>> &cells,
         const std::vector<
-          FaceToCellTopology<VectorizedArrayType::n_array_elements>> &faces,
+          FaceToCellTopology<VectorizedArrayType::size()>> &faces,
         const Mapping<dim> &                                          mapping,
         const UpdateFlags                              update_flags_boundary,
         const UpdateFlags                              update_flags_inner,
@@ -1340,7 +1340,7 @@ namespace internal
               bool JxW_is_similar    = true;
               bool cell_is_cartesian = true;
               for (unsigned int v = 0;
-                   v < VectorizedArrayType::n_array_elements;
+                   v < VectorizedArrayType::size();
                    ++v)
                 {
                   Tensor<2, dim> jacobian_0;
@@ -1563,7 +1563,7 @@ namespace internal
                 }
 
               using VEC_ARRAY =
-                Tensor<1, VectorizedArrayType::n_array_elements, Number>;
+                Tensor<1, VectorizedArrayType::size(), Number>;
               unsigned int insert_position = data.first[my_q].JxW_values.size();
 
               // Fill in JxW values, apply compression
@@ -1577,7 +1577,7 @@ namespace internal
                         new_entry;
                       new_entry.second = data.second.data.size();
                       for (unsigned int v = 0;
-                           v < VectorizedArrayType::n_array_elements;
+                           v < VectorizedArrayType::size();
                            ++v)
                         new_entry.first[2 * dim * dim + dim][v] =
                           face_data.JxW_values[0][v] / quadrature.weight(0) /
@@ -1587,7 +1587,7 @@ namespace internal
                       for (unsigned int d = 0; d < dim; ++d)
                         for (unsigned int e = 0; e < dim; ++e)
                           for (unsigned int v = 0;
-                               v < VectorizedArrayType::n_array_elements;
+                               v < VectorizedArrayType::size();
                                ++v)
                             new_entry.first[d * dim + e][v] =
                               face_data.general_jac[0][d][e][v];
@@ -1595,7 +1595,7 @@ namespace internal
                         for (unsigned int d = 0; d < dim; ++d)
                           for (unsigned int e = 0; e < dim; ++e)
                             for (unsigned int v = 0;
-                                 v < VectorizedArrayType::n_array_elements;
+                                 v < VectorizedArrayType::size();
                                  ++v)
                               new_entry.first[dim * dim + d * dim + e][v] =
                                 face_data.general_jac[n_q_points][d][e][v];
@@ -1608,7 +1608,7 @@ namespace internal
                       // size to get the right scaling
                       for (unsigned int d = 0; d < dim; ++d)
                         for (unsigned int v = 0;
-                             v < VectorizedArrayType::n_array_elements;
+                             v < VectorizedArrayType::size();
                              ++v)
                           new_entry.first[2 * dim * dim + d][v] =
                             face_data.normal_vectors[0][d][v] /
@@ -1647,7 +1647,7 @@ namespace internal
         const unsigned int               last_face,
         const std::vector<GeometryType> &face_type,
         const std::vector<
-          FaceToCellTopology<VectorizedArrayType::n_array_elements>> &faces,
+          FaceToCellTopology<VectorizedArrayType::size()>> &faces,
         MappingInfoStorage<dim - 1, dim, Number, VectorizedArrayType>
           &data_faces)
       {
@@ -1683,7 +1683,7 @@ namespace internal
       const dealii::Triangulation<dim> &                        tria,
       const std::vector<std::pair<unsigned int, unsigned int>> &cells,
       const std::vector<
-        FaceToCellTopology<VectorizedArrayType::n_array_elements>> &faces,
+        FaceToCellTopology<VectorizedArrayType::size()>> &faces,
       const Mapping<dim> &                                          mapping,
       const std::vector<dealii::hp::QCollection<1>> &               quad,
       const UpdateFlags update_flags_boundary_faces,
@@ -1848,7 +1848,7 @@ namespace internal
                 {
                   // JxW values; invert previously applied scaling
                   for (unsigned int v = 0;
-                       v < VectorizedArrayType::n_array_elements;
+                       v < VectorizedArrayType::size();
                        ++v)
                     face_data[my_q].JxW_values[it.second][v] =
                       it.first[2 * dim * dim + dim][v] *
@@ -1859,7 +1859,7 @@ namespace internal
                     for (unsigned int d = 0; d < dim; ++d)
                       for (unsigned int e = 0; e < dim; ++e)
                         for (unsigned int v = 0;
-                             v < VectorizedArrayType::n_array_elements;
+                             v < VectorizedArrayType::size();
                              ++v)
                           face_data[my_q].jacobians[i][it.second][d][e][v] =
                             it.first[i * dim * dim + d * dim + e][v];
@@ -1867,7 +1867,7 @@ namespace internal
                   // normal vectors; invert previously applied scaling
                   for (unsigned int d = 0; d < dim; ++d)
                     for (unsigned int v = 0;
-                         v < VectorizedArrayType::n_array_elements;
+                         v < VectorizedArrayType::size();
                          ++v)
                       face_data[my_q].normal_vectors[it.second][d][v] =
                         it.first[2 * dim * dim + d][v] * jac_size;
@@ -1920,7 +1920,7 @@ namespace internal
       face_data_by_cells.resize(quad.size());
       const unsigned int n_quads = quad.size();
       const unsigned int vectorization_width =
-        VectorizedArrayType::n_array_elements;
+        VectorizedArrayType::size();
       UpdateFlags update_flags =
         (update_flags_faces_by_cells & update_quadrature_points ?
            update_quadrature_points :
@@ -2194,10 +2194,10 @@ namespace internal
     template <typename Number, typename VectorizedArrayType>
     bool
     FPArrayComparator<Number, VectorizedArrayType>::operator()(
-      const Tensor<1, VectorizedArrayType::n_array_elements, Number> &t1,
-      const Tensor<1, VectorizedArrayType::n_array_elements, Number> &t2) const
+      const Tensor<1, VectorizedArrayType::size(), Number> &t1,
+      const Tensor<1, VectorizedArrayType::size(), Number> &t2) const
     {
-      for (unsigned int k = 0; k < VectorizedArrayType::n_array_elements; ++k)
+      for (unsigned int k = 0; k < VectorizedArrayType::size(); ++k)
         if (t1[k] < t2[k] - tolerance)
           return true;
         else if (t1[k] > t2[k] + tolerance)
@@ -2213,15 +2213,15 @@ namespace internal
     FPArrayComparator<Number, VectorizedArrayType>::operator()(
       const Tensor<1,
                    dim,
-                   Tensor<1, VectorizedArrayType::n_array_elements, Number>>
+                   Tensor<1, VectorizedArrayType::size(), Number>>
         &t1,
       const Tensor<1,
                    dim,
-                   Tensor<1, VectorizedArrayType::n_array_elements, Number>>
+                   Tensor<1, VectorizedArrayType::size(), Number>>
         &t2) const
     {
       for (unsigned int d = 0; d < dim; ++d)
-        for (unsigned int k = 0; k < VectorizedArrayType::n_array_elements; ++k)
+        for (unsigned int k = 0; k < VectorizedArrayType::size(); ++k)
           if (t1[d][k] < t2[d][k] - tolerance)
             return true;
           else if (t1[d][k] > t2[d][k] + tolerance)
@@ -2237,16 +2237,16 @@ namespace internal
     FPArrayComparator<Number, VectorizedArrayType>::operator()(
       const Tensor<2,
                    dim,
-                   Tensor<1, VectorizedArrayType::n_array_elements, Number>>
+                   Tensor<1, VectorizedArrayType::size(), Number>>
         &t1,
       const Tensor<2,
                    dim,
-                   Tensor<1, VectorizedArrayType::n_array_elements, Number>>
+                   Tensor<1, VectorizedArrayType::size(), Number>>
         &t2) const
     {
       for (unsigned int d = 0; d < dim; ++d)
         for (unsigned int e = 0; e < dim; ++e)
-          for (unsigned int k = 0; k < VectorizedArrayType::n_array_elements;
+          for (unsigned int k = 0; k < VectorizedArrayType::size();
                ++k)
             if (t1[d][e][k] < t2[d][e][k] - tolerance)
               return true;

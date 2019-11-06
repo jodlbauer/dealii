@@ -89,7 +89,7 @@ public:
         // values should evaluate to one, derivatives to zero
         for (unsigned int q = 0; q < fe_eval.n_q_points; ++q)
           for (unsigned int d = 0;
-               d < VectorizedArray<Number>::n_array_elements;
+               d < VectorizedArray<Number>::size();
                ++d)
             {
               Assert(fe_eval.get_value(q)[d] == 1., ExcInternalError());

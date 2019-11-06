@@ -148,7 +148,7 @@ namespace internal
       /**
        * Stores the shape values of the 1D finite element evaluated on all 1D
        * quadrature points in vectorized format, i.e., as an array of
-       * VectorizedArray<dim>::n_array_elements equal elements. The length of
+       * VectorizedArray<dim>::size() equal elements. The length of
        * this array is <tt>n_dofs_1d * n_q_points_1d</tt> and quadrature
        * points are the index running fastest.
        */
@@ -157,7 +157,7 @@ namespace internal
       /**
        * Stores the shape gradients of the 1D finite element evaluated on all
        * 1D quadrature points in vectorized format, i.e., as an array of
-       * VectorizedArray<dim>::n_array_elements equal elements. The length of
+       * VectorizedArray<dim>::size() equal elements. The length of
        * this array is <tt>n_dofs_1d * n_q_points_1d</tt> and quadrature
        * points are the index running fastest.
        */
@@ -166,7 +166,7 @@ namespace internal
       /**
        * Stores the shape Hessians of the 1D finite element evaluated on all
        * 1D quadrature points in vectorized format, i.e., as an array of
-       * VectorizedArray<dim>::n_array_elements equal elements. The length of
+       * VectorizedArray<dim>::size() equal elements. The length of
        * this array is <tt>n_dofs_1d * n_q_points_1d</tt> and quadrature
        * points are the index running fastest.
        */

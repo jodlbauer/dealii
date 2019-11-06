@@ -487,7 +487,7 @@ namespace StokesClass
             VectorizedArray<number> return_value =
               make_vectorized_array<number>(1.);
             for (unsigned int i = 0;
-                 i < VectorizedArray<number>::n_array_elements;
+                 i < VectorizedArray<number>::size();
                  ++i)
               {
                 Point<dim> p;
@@ -624,7 +624,7 @@ namespace StokesClass
             VectorizedArray<number> return_value =
               make_vectorized_array<number>(1.);
             for (unsigned int i = 0;
-                 i < VectorizedArray<number>::n_array_elements;
+                 i < VectorizedArray<number>::size();
                  ++i)
               {
                 Point<dim> p;
@@ -804,7 +804,7 @@ namespace StokesClass
             VectorizedArray<number> return_value =
               make_vectorized_array<number>(1.);
             for (unsigned int i = 0;
-                 i < VectorizedArray<number>::n_array_elements;
+                 i < VectorizedArray<number>::size();
                  ++i)
               {
                 Point<dim> p;
@@ -1229,7 +1229,7 @@ namespace StokesClass
               rhs_u[d] = make_vectorized_array<double>(1.0);
             VectorizedArray<double> rhs_p = make_vectorized_array<double>(1.0);
             for (unsigned int i = 0;
-                 i < VectorizedArray<double>::n_array_elements;
+                 i < VectorizedArray<double>::size();
                  ++i)
               {
                 Point<dim> p;

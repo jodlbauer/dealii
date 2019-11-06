@@ -104,7 +104,7 @@ test()
       for (unsigned int f = 0; f < mf_data.n_inner_face_batches(); ++f)
         {
           for (unsigned int v = 0;
-               v < VectorizedArray<double>::n_array_elements;
+               v < VectorizedArray<double>::size();
                ++v)
             if (mf_data.get_face_info(f).cells_interior[v] !=
                 numbers::invalid_unsigned_int)
@@ -120,7 +120,7 @@ test()
            ++f)
         {
           for (unsigned int v = 0;
-               v < VectorizedArray<double>::n_array_elements;
+               v < VectorizedArray<double>::size();
                ++v)
             if (mf_data.get_face_info(f).cells_interior[v] !=
                 numbers::invalid_unsigned_int)

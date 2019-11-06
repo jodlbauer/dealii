@@ -764,7 +764,7 @@ namespace internal
     {
       static const bool vectorizes =
         std::is_same<Number, Number2>::value &&
-        (VectorizedArray<Number>::n_array_elements > 1);
+        (VectorizedArray<Number>::size() > 1);
 
       Dot(const Number *const X, const Number2 *const Y)
         : X(X)
@@ -805,7 +805,7 @@ namespace internal
     struct Norm2
     {
       static const bool vectorizes =
-        VectorizedArray<Number>::n_array_elements > 1;
+        VectorizedArray<Number>::size() > 1;
 
       Norm2(const Number *const X)
         : X(X)
@@ -832,7 +832,7 @@ namespace internal
     struct Norm1
     {
       static const bool vectorizes =
-        VectorizedArray<Number>::n_array_elements > 1;
+        VectorizedArray<Number>::size() > 1;
 
       Norm1(const Number *X)
         : X(X)
@@ -859,7 +859,7 @@ namespace internal
     struct NormP
     {
       static const bool vectorizes =
-        VectorizedArray<Number>::n_array_elements > 1;
+        VectorizedArray<Number>::size() > 1;
 
       NormP(const Number *X, RealType p)
         : X(X)
@@ -888,7 +888,7 @@ namespace internal
     struct MeanValue
     {
       static const bool vectorizes =
-        VectorizedArray<Number>::n_array_elements > 1;
+        VectorizedArray<Number>::size() > 1;
 
       MeanValue(const Number *X)
         : X(X)
@@ -915,7 +915,7 @@ namespace internal
     struct AddAndDot
     {
       static const bool vectorizes =
-        VectorizedArray<Number>::n_array_elements > 1;
+        VectorizedArray<Number>::size() > 1;
 
       AddAndDot(Number *const       X,
                 const Number *const V,
@@ -1200,7 +1200,7 @@ namespace internal
       // First we work on (n_chunks/nvecs) chunks, where each chunk processes
       // nvecs*(4*8) elements.
 
-      const unsigned int nvecs = VectorizedArray<Number>::n_array_elements;
+      const unsigned int nvecs = VectorizedArray<Number>::size();
       const size_type    regular_chunks = n_chunks / nvecs;
       for (size_type i = 0; i < regular_chunks; ++i)
         {
@@ -1220,7 +1220,7 @@ namespace internal
           r2 += r3;
           r0 += r2;
           r0.store(
-            &outer_results[i * VectorizedArray<Number>::n_array_elements]);
+            &outer_results[i * VectorizedArray<Number>::size()]);
         }
 
       // If we are treating a case where the vector length is not divisible by
@@ -1229,9 +1229,9 @@ namespace internal
       // regular_chunks * nvecs; We do as much as possible with 2 SIMD
       // operations within each chunk. Here we assume that nvecs < 32/2 = 16 as
       // well as 16%nvecs==0.
-      AssertIndexRange(VectorizedArray<Number>::n_array_elements, 17);
+      AssertIndexRange(VectorizedArray<Number>::size(), 17);
       Assert(16 % nvecs == 0, ExcInternalError());
-      if (n_chunks % VectorizedArray<Number>::n_array_elements != 0)
+      if (n_chunks % VectorizedArray<Number>::size() != 0)
         {
           VectorizedArray<Number> r0  = VectorizedArray<Number>(),
                                   r1  = VectorizedArray<Number>();
@@ -1246,7 +1246,7 @@ namespace internal
           r0.store(&outer_results[start_irreg]);
           // update n_chunks to denote unused element in outer_results[] from
           // which we can keep writing.
-          n_chunks = start_irreg + VectorizedArray<Number>::n_array_elements;
+          n_chunks = start_irreg + VectorizedArray<Number>::size();
         }
     }
 

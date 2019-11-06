@@ -1171,7 +1171,7 @@ namespace Step37
   {
     {
       const unsigned int n_vect_doubles =
-        VectorizedArray<double>::n_array_elements;
+        VectorizedArray<double>::size();
       const unsigned int n_vect_bits = 8 * sizeof(double) * n_vect_doubles;
 
       pcout << "Vectorization over " << n_vect_doubles

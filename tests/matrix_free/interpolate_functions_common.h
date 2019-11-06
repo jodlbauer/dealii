@@ -130,7 +130,7 @@ public:
         fe_evalp.read_dof_values(src);
         fe_evalp.evaluate(true, true);
 
-        for (unsigned int j = 0; j < VectorizedArray<Number>::n_array_elements;
+        for (unsigned int j = 0; j < VectorizedArray<Number>::size();
              ++j)
           {
             // skip empty components in VectorizedArray
@@ -194,7 +194,7 @@ public:
         fe_evalm.read_dof_values(src);
         fe_evalm.evaluate(true, true);
 
-        for (unsigned int j = 0; j < VectorizedArray<Number>::n_array_elements;
+        for (unsigned int j = 0; j < VectorizedArray<Number>::size();
              ++j)
           {
             // skip empty components in VectorizedArray

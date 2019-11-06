@@ -313,7 +313,7 @@ namespace internal
       initialize(
         const dealii::Triangulation<dim> &                        tria,
         const std::vector<std::pair<unsigned int, unsigned int>> &cells,
-        const FaceInfo<VectorizedArrayType::n_array_elements> &   faces,
+        const FaceInfo<VectorizedArrayType::size()> &   faces,
         const std::vector<unsigned int> &              active_fe_index,
         const Mapping<dim> &                           mapping,
         const std::vector<dealii::hp::QCollection<1>> &quad,
@@ -412,7 +412,7 @@ namespace internal
         const dealii::Triangulation<dim> &                        tria,
         const std::vector<std::pair<unsigned int, unsigned int>> &cells,
         const std::vector<
-          FaceToCellTopology<VectorizedArrayType::n_array_elements>> &faces,
+          FaceToCellTopology<VectorizedArrayType::size()>> &faces,
         const Mapping<dim> &                                          mapping,
         const std::vector<dealii::hp::QCollection<1>> &               quad,
         const UpdateFlags update_flags_boundary_faces,
@@ -501,8 +501,8 @@ namespace internal
 
       bool
       operator()(
-        const Tensor<1, VectorizedArrayType::n_array_elements, Number> &t1,
-        const Tensor<1, VectorizedArrayType::n_array_elements, Number> &t2)
+        const Tensor<1, VectorizedArrayType::size(), Number> &t1,
+        const Tensor<1, VectorizedArrayType::size(), Number> &t2)
         const;
 
       template <int dim>
@@ -510,11 +510,11 @@ namespace internal
       operator()(
         const Tensor<1,
                      dim,
-                     Tensor<1, VectorizedArrayType::n_array_elements, Number>>
+                     Tensor<1, VectorizedArrayType::size(), Number>>
           &t1,
         const Tensor<1,
                      dim,
-                     Tensor<1, VectorizedArrayType::n_array_elements, Number>>
+                     Tensor<1, VectorizedArrayType::size(), Number>>
           &t2) const;
 
       template <int dim>
@@ -522,11 +522,11 @@ namespace internal
       operator()(
         const Tensor<2,
                      dim,
-                     Tensor<1, VectorizedArrayType::n_array_elements, Number>>
+                     Tensor<1, VectorizedArrayType::size(), Number>>
           &t1,
         const Tensor<2,
                      dim,
-                     Tensor<1, VectorizedArrayType::n_array_elements, Number>>
+                     Tensor<1, VectorizedArrayType::size(), Number>>
           &t2) const;
 
       Number tolerance;

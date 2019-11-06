@@ -77,7 +77,7 @@ public:
 
         for (unsigned int i = 0; i < fe_eval.dofs_per_cell; ++i)
           for (unsigned int j = 0;
-               j < VectorizedArray<Number>::n_array_elements;
+               j < VectorizedArray<Number>::size();
                ++j)
             {
               error += std::fabs(fe_eval.get_dof_value(i)[j] -

@@ -166,7 +166,7 @@ private:
             value_type average_value =
               (fe_eval.get_value(q) - fe_eval_neighbor.get_value(q)) *
               make_vectorized_array<number,
-                                    VectorizedArrayType::n_array_elements>(0.5);
+                                    VectorizedArrayType::size()>(0.5);
             value_type average_valgrad =
               fe_eval.get_normal_derivative(q) +
               fe_eval_neighbor.get_normal_derivative(q);
@@ -174,7 +174,7 @@ private:
               average_value * sigmaF -
               average_valgrad *
                 make_vectorized_array<number,
-                                      VectorizedArrayType::n_array_elements>(
+                                      VectorizedArrayType::size()>(
                   0.5);
             fe_eval.submit_normal_derivative(-average_value, q);
             fe_eval_neighbor.submit_normal_derivative(-average_value, q);
@@ -370,7 +370,7 @@ private:
             value_type average_value =
               (fe_eval.get_value(q) - fe_eval_neighbor.get_value(q)) *
               make_vectorized_array<number,
-                                    VectorizedArrayType::n_array_elements>(0.5);
+                                    VectorizedArrayType::size()>(0.5);
             value_type average_valgrad =
               fe_eval.get_normal_derivative(q) +
               fe_eval_neighbor.get_normal_derivative(q);
@@ -378,7 +378,7 @@ private:
               average_value * sigmaF -
               average_valgrad *
                 make_vectorized_array<number,
-                                      VectorizedArrayType::n_array_elements>(
+                                      VectorizedArrayType::size()>(
                   0.5);
             fe_eval.submit_normal_derivative(-average_value, q);
             fe_eval_neighbor.submit_normal_derivative(-average_value, q);
@@ -593,7 +593,7 @@ private:
               advection * phi_m.get_normal_vector(q);
             const value_type flux_times_normal =
               make_vectorized_array<number,
-                                    VectorizedArrayType::n_array_elements>(
+                                    VectorizedArrayType::size()>(
                 0.5) *
               ((u_minus + u_plus) * normal_times_advection +
                std::abs(normal_times_advection) * (u_minus - u_plus));
@@ -629,7 +629,7 @@ private:
                                 VectorizedArrayType>::value_type value_type;
     value_type                                                   u_plus;
     u_plus =
-      make_vectorized_array<number, VectorizedArrayType::n_array_elements>(1.3);
+      make_vectorized_array<number, VectorizedArrayType::size()>(1.3);
 
     for (unsigned int face = face_range.first; face < face_range.second; face++)
       {
@@ -643,7 +643,7 @@ private:
               advection * fe_eval.get_normal_vector(q);
             const value_type flux_times_normal =
               make_vectorized_array<number,
-                                    VectorizedArrayType::n_array_elements>(
+                                    VectorizedArrayType::size()>(
                 0.5) *
               ((u_minus + u_plus) * normal_times_advection +
                std::abs(normal_times_advection) * (u_minus - u_plus));

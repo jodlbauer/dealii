@@ -85,7 +85,7 @@ class MatrixFreeTest
 public:
   typedef VectorizedArray<Number> vector_t;
   static const std::size_t        n_vectors =
-    VectorizedArray<Number>::n_array_elements;
+    VectorizedArray<Number>::size();
 
   MatrixFreeTest(const MatrixFree<dim, Number> &data_in)
     : data(data_in){};

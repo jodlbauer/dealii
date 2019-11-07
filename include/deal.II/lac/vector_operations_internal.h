@@ -762,9 +762,8 @@ namespace internal
     template <typename Number, typename Number2>
     struct Dot
     {
-      static const bool vectorizes =
-        std::is_same<Number, Number2>::value &&
-        (VectorizedArray<Number>::size() > 1);
+      static const bool vectorizes = std::is_same<Number, Number2>::value &&
+                                     (VectorizedArray<Number>::size() > 1);
 
       Dot(const Number *const X, const Number2 *const Y)
         : X(X)
@@ -804,8 +803,7 @@ namespace internal
     template <typename Number, typename RealType>
     struct Norm2
     {
-      static const bool vectorizes =
-        VectorizedArray<Number>::size() > 1;
+      static const bool vectorizes = VectorizedArray<Number>::size() > 1;
 
       Norm2(const Number *const X)
         : X(X)
@@ -831,8 +829,7 @@ namespace internal
     template <typename Number, typename RealType>
     struct Norm1
     {
-      static const bool vectorizes =
-        VectorizedArray<Number>::size() > 1;
+      static const bool vectorizes = VectorizedArray<Number>::size() > 1;
 
       Norm1(const Number *X)
         : X(X)
@@ -858,8 +855,7 @@ namespace internal
     template <typename Number, typename RealType>
     struct NormP
     {
-      static const bool vectorizes =
-        VectorizedArray<Number>::size() > 1;
+      static const bool vectorizes = VectorizedArray<Number>::size() > 1;
 
       NormP(const Number *X, RealType p)
         : X(X)
@@ -887,8 +883,7 @@ namespace internal
     template <typename Number>
     struct MeanValue
     {
-      static const bool vectorizes =
-        VectorizedArray<Number>::size() > 1;
+      static const bool vectorizes = VectorizedArray<Number>::size() > 1;
 
       MeanValue(const Number *X)
         : X(X)
@@ -914,8 +909,7 @@ namespace internal
     template <typename Number>
     struct AddAndDot
     {
-      static const bool vectorizes =
-        VectorizedArray<Number>::size() > 1;
+      static const bool vectorizes = VectorizedArray<Number>::size() > 1;
 
       AddAndDot(Number *const       X,
                 const Number *const V,
@@ -1200,7 +1194,7 @@ namespace internal
       // First we work on (n_chunks/nvecs) chunks, where each chunk processes
       // nvecs*(4*8) elements.
 
-      const unsigned int nvecs = VectorizedArray<Number>::size();
+      const unsigned int nvecs          = VectorizedArray<Number>::size();
       const size_type    regular_chunks = n_chunks / nvecs;
       for (size_type i = 0; i < regular_chunks; ++i)
         {
@@ -1219,8 +1213,7 @@ namespace internal
           r0 += r1;
           r2 += r3;
           r0 += r2;
-          r0.store(
-            &outer_results[i * VectorizedArray<Number>::size()]);
+          r0.store(&outer_results[i * VectorizedArray<Number>::size()]);
         }
 
       // If we are treating a case where the vector length is not divisible by

@@ -258,8 +258,8 @@ public:
   template <typename VectorType>
   void
   distribute_local_to_global(
-    VectorType &                                              dst,
-    const unsigned int                                        first_index = 0,
+    VectorType &                                    dst,
+    const unsigned int                              first_index = 0,
     const std::bitset<VectorizedArrayType::size()> &mask =
       std::bitset<VectorizedArrayType::size()>().flip()) const;
 
@@ -297,11 +297,10 @@ public:
    */
   template <typename VectorType>
   void
-  set_dof_values(
-    VectorType &                                              dst,
-    const unsigned int                                        first_index = 0,
-    const std::bitset<VectorizedArrayType::size()> &mask =
-      std::bitset<VectorizedArrayType::size()>().flip()) const;
+  set_dof_values(VectorType &       dst,
+                 const unsigned int first_index = 0,
+                 const std::bitset<VectorizedArrayType::size()> &mask =
+                   std::bitset<VectorizedArrayType::size()>().flip()) const;
 
   //@}
 
@@ -607,9 +606,8 @@ public:
    */
   template <typename T>
   std::array<T, VectorizedArrayType::size()>
-  read_cell_data(
-    const AlignedVector<std::array<T, VectorizedArrayType::size()>>
-      &array) const;
+  read_cell_data(const AlignedVector<std::array<T, VectorizedArrayType::size()>>
+                   &array) const;
 
   //@}
 
@@ -831,11 +829,10 @@ protected:
    */
   template <typename VectorType, typename VectorOperation>
   void
-  read_write_operation(
-    const VectorOperation &                                   operation,
-    VectorType *                                              vectors[],
-    const std::bitset<VectorizedArrayType::size()> &mask,
-    const bool apply_constraints = true) const;
+  read_write_operation(const VectorOperation &operation,
+                       VectorType *           vectors[],
+                       const std::bitset<VectorizedArrayType::size()> &mask,
+                       const bool apply_constraints = true) const;
 
   /**
    * A unified function to read from and write into vectors based on the given
@@ -847,8 +844,8 @@ protected:
   template <typename VectorType, typename VectorOperation>
   void
   read_write_operation_contiguous(
-    const VectorOperation &                                   operation,
-    VectorType *                                              vectors[],
+    const VectorOperation &                         operation,
+    VectorType *                                    vectors[],
     const std::bitset<VectorizedArrayType::size()> &mask) const;
 
   /**
@@ -3596,9 +3593,8 @@ template <int dim,
 template <typename T>
 inline std::array<T, VectorizedArrayType::size()>
 FEEvaluationBase<dim, n_components_, Number, is_face, VectorizedArrayType>::
-  read_cell_data(
-    const AlignedVector<std::array<T, VectorizedArrayType::size()>>
-      &array) const
+  read_cell_data(const AlignedVector<std::array<T, VectorizedArrayType::size()>>
+                   &array) const
 {
   Assert(matrix_info != nullptr, ExcNotImplemented());
   AssertDimension(array.size(),
@@ -3606,7 +3602,7 @@ FEEvaluationBase<dim, n_components_, Number, is_face, VectorizedArrayType>::
   if (is_face)
     {
       std::array<T, VectorizedArrayType::size()> out;
-      const unsigned int *                                 cells =
+      const unsigned int *                       cells =
         is_interior_face ?
           &this->matrix_info->get_face_info(cell).cells_interior[0] :
           &this->matrix_info->get_face_info(cell).cells_exterior[0];
@@ -3708,11 +3704,10 @@ template <int dim,
 template <typename VectorType, typename VectorOperation>
 inline void
 FEEvaluationBase<dim, n_components_, Number, is_face, VectorizedArrayType>::
-  read_write_operation(
-    const VectorOperation &                                   operation,
-    VectorType *                                              src[],
-    const std::bitset<VectorizedArrayType::size()> &mask,
-    const bool apply_constraints) const
+  read_write_operation(const VectorOperation &operation,
+                       VectorType *           src[],
+                       const std::bitset<VectorizedArrayType::size()> &mask,
+                       const bool apply_constraints) const
 {
   // Case 1: No MatrixFree object given, simple case because we do not need to
   // process constraints and need not care about vectorization -> go to
@@ -3749,8 +3744,7 @@ FEEvaluationBase<dim, n_components_, Number, is_face, VectorizedArrayType>::
 
   // Case 3: standard operation with one index per degree of freedom -> go on
   // here
-  constexpr unsigned int n_vectorization =
-    VectorizedArrayType::size();
+  constexpr unsigned int n_vectorization = VectorizedArrayType::size();
   Assert(mask.count() == n_vectorization,
          ExcNotImplemented("Masking currently not implemented for "
                            "non-contiguous DoF storage"));
@@ -4158,8 +4152,8 @@ template <typename VectorType, typename VectorOperation>
 inline void
 FEEvaluationBase<dim, n_components_, Number, is_face, VectorizedArrayType>::
   read_write_operation_contiguous(
-    const VectorOperation &                                   operation,
-    VectorType *                                              src[],
+    const VectorOperation &                         operation,
+    VectorType *                                    src[],
     const std::bitset<VectorizedArrayType::size()> &mask) const
 {
   // This functions processes the functions read_dof_values,
@@ -4261,12 +4255,11 @@ FEEvaluationBase<dim, n_components_, Number, is_face, VectorizedArrayType>::
             for (unsigned int i = 0; i < data->dofs_per_component_on_cell; ++i)
               {
                 for (unsigned int comp = 0; comp < n_components; ++comp)
-                  operation.process_dof_gather(
-                    dof_indices,
-                    *src[comp],
-                    i * VectorizedArrayType::size(),
-                    values_dofs[comp][i],
-                    vector_selector);
+                  operation.process_dof_gather(dof_indices,
+                                               *src[comp],
+                                               i * VectorizedArrayType::size(),
+                                               values_dofs[comp][i],
+                                               vector_selector);
               }
           else
             for (unsigned int comp = 0; comp < n_components; ++comp)
@@ -4301,9 +4294,7 @@ FEEvaluationBase<dim, n_components_, Number, is_face, VectorizedArrayType>::
                                                values_dofs[comp][i],
                                                vector_selector);
                 DEAL_II_OPENMP_SIMD_PRAGMA
-                for (unsigned int v = 0;
-                     v < VectorizedArrayType::size();
-                     ++v)
+                for (unsigned int v = 0; v < VectorizedArrayType::size(); ++v)
                   dof_indices[v] += offsets[v];
               }
           else
@@ -4317,9 +4308,7 @@ FEEvaluationBase<dim, n_components_, Number, is_face, VectorizedArrayType>::
                                                values_dofs[comp][i],
                                                vector_selector);
                   DEAL_II_OPENMP_SIMD_PRAGMA
-                  for (unsigned int v = 0;
-                       v < VectorizedArrayType::size();
-                       ++v)
+                  for (unsigned int v = 0; v < VectorizedArrayType::size(); ++v)
                     dof_indices[v] += offsets[v];
                 }
         }
@@ -4364,8 +4353,7 @@ FEEvaluationBase<dim, n_components_, Number, is_face, VectorizedArrayType>::
               &dof_info->dof_indices_interleave_strides
                  [ind][VectorizedArrayType::size() * cell];
             for (unsigned int v = 0; v < vectorization_populated; ++v)
-              AssertIndexRange(offsets[v],
-                               VectorizedArrayType::size() + 1);
+              AssertIndexRange(offsets[v], VectorizedArrayType::size() + 1);
             if (n_components == 1 || n_fe_components == 1)
               for (unsigned int v = 0; v < vectorization_populated; ++v)
                 {
@@ -4419,11 +4407,10 @@ FEEvaluationBase<dim, n_components_, Number, is_face, VectorizedArrayType>::
         get_vector_component(const_cast<VectorType &>(src), d + first_index);
 
   internal::VectorReader<Number, VectorizedArrayType> reader;
-  read_write_operation(
-    reader,
-    src_data,
-    std::bitset<VectorizedArrayType::size()>().flip(),
-    true);
+  read_write_operation(reader,
+                       src_data,
+                       std::bitset<VectorizedArrayType::size()>().flip(),
+                       true);
 
 #  ifdef DEBUG
   dof_values_initialized = true;
@@ -4454,11 +4441,10 @@ FEEvaluationBase<dim, n_components_, Number, is_face, VectorizedArrayType>::
         get_vector_component(const_cast<VectorType &>(src), d + first_index);
 
   internal::VectorReader<Number, VectorizedArrayType> reader;
-  read_write_operation(
-    reader,
-    src_data,
-    std::bitset<VectorizedArrayType::size()>().flip(),
-    false);
+  read_write_operation(reader,
+                       src_data,
+                       std::bitset<VectorizedArrayType::size()>().flip(),
+                       false);
 
 #  ifdef DEBUG
   dof_values_initialized = true;
@@ -4476,8 +4462,8 @@ template <typename VectorType>
 inline void
 FEEvaluationBase<dim, n_components_, Number, is_face, VectorizedArrayType>::
   distribute_local_to_global(
-    VectorType &                                              dst,
-    const unsigned int                                        first_index,
+    VectorType &                                    dst,
+    const unsigned int                              first_index,
     const std::bitset<VectorizedArrayType::size()> &mask) const
 {
   Assert(dof_values_initialized == true,
@@ -4509,10 +4495,9 @@ template <int dim,
 template <typename VectorType>
 inline void
 FEEvaluationBase<dim, n_components_, Number, is_face, VectorizedArrayType>::
-  set_dof_values(
-    VectorType &                                              dst,
-    const unsigned int                                        first_index,
-    const std::bitset<VectorizedArrayType::size()> &mask) const
+  set_dof_values(VectorType &                                    dst,
+                 const unsigned int                              first_index,
+                 const std::bitset<VectorizedArrayType::size()> &mask) const
 {
   Assert(dof_values_initialized == true,
          internal::ExcAccessToUninitializedField());

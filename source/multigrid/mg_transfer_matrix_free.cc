@@ -348,8 +348,8 @@ MGTransferMatrixFree<dim, Number>::do_prolongate_add(
   LinearAlgebra::distributed::Vector<Number> &      dst,
   const LinearAlgebra::distributed::Vector<Number> &src) const
 {
-  const unsigned int vec_size    = VectorizedArray<Number>::size();
-  const unsigned int degree_size = (degree > -1 ? degree : fe_degree) + 1;
+  const unsigned int vec_size        = VectorizedArray<Number>::size();
+  const unsigned int degree_size     = (degree > -1 ? degree : fe_degree) + 1;
   const unsigned int n_child_dofs_1d = 2 * degree_size - element_is_continuous;
   const unsigned int n_scalar_cell_dofs =
     Utilities::fixed_power<dim>(n_child_dofs_1d);
@@ -487,8 +487,8 @@ MGTransferMatrixFree<dim, Number>::do_restrict_add(
   LinearAlgebra::distributed::Vector<Number> &      dst,
   const LinearAlgebra::distributed::Vector<Number> &src) const
 {
-  const unsigned int vec_size    = VectorizedArray<Number>::size();
-  const unsigned int degree_size = (degree > -1 ? degree : fe_degree) + 1;
+  const unsigned int vec_size        = VectorizedArray<Number>::size();
+  const unsigned int degree_size     = (degree > -1 ? degree : fe_degree) + 1;
   const unsigned int n_child_dofs_1d = 2 * degree_size - element_is_continuous;
   const unsigned int n_scalar_cell_dofs =
     Utilities::fixed_power<dim>(n_child_dofs_1d);

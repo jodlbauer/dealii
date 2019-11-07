@@ -89,9 +89,7 @@ private:
           {
             VectorizedArray<number> diff =
               (ref.get_value(q) - check.get_value(q));
-            for (unsigned int v = 0;
-                 v < VectorizedArray<number>::size();
-                 ++v)
+            for (unsigned int v = 0; v < VectorizedArray<number>::size(); ++v)
               {
                 if (std::abs(diff[v]) > 1e-12)
                   {
@@ -139,9 +137,7 @@ private:
           {
             VectorizedArray<number> diff =
               (refr.get_value(q) - checkr.get_value(q));
-            for (unsigned int v = 0;
-                 v < VectorizedArray<number>::size();
-                 ++v)
+            for (unsigned int v = 0; v < VectorizedArray<number>::size(); ++v)
               {
                 if (std::abs(diff[v]) > 1e-12)
                   {

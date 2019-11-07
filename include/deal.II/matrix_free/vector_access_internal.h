@@ -253,8 +253,8 @@ namespace internal
     {
       for (unsigned int i = 0; i < dofs_per_cell; ++i)
         for (unsigned int v = 0; v < VectorizedArrayType::size(); ++v)
-          dof_values[i][v] = vector_access(
-            vec, dof_index + v + i * VectorizedArrayType::size());
+          dof_values[i][v] =
+            vector_access(vec, dof_index + v + i * VectorizedArrayType::size());
     }
 
 
@@ -415,8 +415,7 @@ namespace internal
       for (unsigned int i = 0; i < dofs_per_cell; ++i)
         for (unsigned int v = 0; v < VectorizedArrayType::size(); ++v)
           vector_access_add(vec,
-                            dof_index + v +
-                              i * VectorizedArrayType::size(),
+                            dof_index + v + i * VectorizedArrayType::size(),
                             dof_values[i][v]);
     }
 
@@ -574,9 +573,7 @@ namespace internal
     {
       for (unsigned int i = 0; i < dofs_per_cell; ++i)
         for (unsigned int v = 0; v < VectorizedArrayType::size(); ++v)
-          vector_access(vec,
-                        dof_index + v +
-                          i * VectorizedArrayType::size()) =
+          vector_access(vec, dof_index + v + i * VectorizedArrayType::size()) =
             dof_values[i][v];
     }
 

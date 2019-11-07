@@ -313,7 +313,7 @@ namespace internal
       initialize(
         const dealii::Triangulation<dim> &                        tria,
         const std::vector<std::pair<unsigned int, unsigned int>> &cells,
-        const FaceInfo<VectorizedArrayType::size()> &   faces,
+        const FaceInfo<VectorizedArrayType::size()> &             faces,
         const std::vector<unsigned int> &              active_fe_index,
         const Mapping<dim> &                           mapping,
         const std::vector<dealii::hp::QCollection<1>> &quad,
@@ -411,10 +411,10 @@ namespace internal
       initialize_faces(
         const dealii::Triangulation<dim> &                        tria,
         const std::vector<std::pair<unsigned int, unsigned int>> &cells,
-        const std::vector<
-          FaceToCellTopology<VectorizedArrayType::size()>> &faces,
-        const Mapping<dim> &                                          mapping,
-        const std::vector<dealii::hp::QCollection<1>> &               quad,
+        const std::vector<FaceToCellTopology<VectorizedArrayType::size()>>
+          &                                            faces,
+        const Mapping<dim> &                           mapping,
+        const std::vector<dealii::hp::QCollection<1>> &quad,
         const UpdateFlags update_flags_boundary_faces,
         const UpdateFlags update_flags_inner_faces);
 
@@ -502,31 +502,22 @@ namespace internal
       bool
       operator()(
         const Tensor<1, VectorizedArrayType::size(), Number> &t1,
-        const Tensor<1, VectorizedArrayType::size(), Number> &t2)
-        const;
+        const Tensor<1, VectorizedArrayType::size(), Number> &t2) const;
 
       template <int dim>
       bool
       operator()(
-        const Tensor<1,
-                     dim,
-                     Tensor<1, VectorizedArrayType::size(), Number>>
+        const Tensor<1, dim, Tensor<1, VectorizedArrayType::size(), Number>>
           &t1,
-        const Tensor<1,
-                     dim,
-                     Tensor<1, VectorizedArrayType::size(), Number>>
+        const Tensor<1, dim, Tensor<1, VectorizedArrayType::size(), Number>>
           &t2) const;
 
       template <int dim>
       bool
       operator()(
-        const Tensor<2,
-                     dim,
-                     Tensor<1, VectorizedArrayType::size(), Number>>
+        const Tensor<2, dim, Tensor<1, VectorizedArrayType::size(), Number>>
           &t1,
-        const Tensor<2,
-                     dim,
-                     Tensor<1, VectorizedArrayType::size(), Number>>
+        const Tensor<2, dim, Tensor<1, VectorizedArrayType::size(), Number>>
           &t2) const;
 
       Number tolerance;

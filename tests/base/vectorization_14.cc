@@ -25,8 +25,8 @@ template <typename VectorizedArrayType>
 void
 do_test()
 {
-  deallog << "  test " << VectorizedArrayType::size()
-          << " array elements" << std::endl;
+  deallog << "  test " << VectorizedArrayType::size() << " array elements"
+          << std::endl;
 
   VectorizedArrayType left;
   for (unsigned int i = 0; i < VectorizedArrayType::size(); i++)

@@ -2318,12 +2318,8 @@ MatrixFree<dim, Number, VectorizedArrayType>::at_irregular_cell(
 {
   AssertIndexRange(macro_cell, task_info.cell_partition_data.back());
   return VectorizedArrayType::size() > 1 &&
-         cell_level_index[(macro_cell + 1) *
-                            VectorizedArrayType::size() -
-                          1] ==
-           cell_level_index[(macro_cell + 1) *
-                              VectorizedArrayType::size() -
-                            2];
+         cell_level_index[(macro_cell + 1) * VectorizedArrayType::size() - 1] ==
+           cell_level_index[(macro_cell + 1) * VectorizedArrayType::size() - 2];
 }
 
 
@@ -2345,13 +2341,11 @@ MatrixFree<dim, Number, VectorizedArrayType>::n_active_entries_per_cell_batch(
 {
   AssertIndexRange(cell_batch_number, task_info.cell_partition_data.back());
   unsigned int n_components = VectorizedArrayType::size();
-  while (
-    n_components > 1 &&
-    cell_level_index[cell_batch_number * VectorizedArrayType::size() +
-                     n_components - 1] ==
-      cell_level_index[cell_batch_number *
-                         VectorizedArrayType::size() +
-                       n_components - 2])
+  while (n_components > 1 &&
+         cell_level_index[cell_batch_number * VectorizedArrayType::size() +
+                          n_components - 1] ==
+           cell_level_index[cell_batch_number * VectorizedArrayType::size() +
+                            n_components - 2])
     --n_components;
   AssertIndexRange(n_components - 1, VectorizedArrayType::size());
   return n_components;

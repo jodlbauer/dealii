@@ -211,8 +211,7 @@ public:
   VectorizedArrayIterator<T>
   end()
   {
-    return VectorizedArrayIterator<T>(static_cast<T &>(*this),
-                                      T::size());
+    return VectorizedArrayIterator<T>(static_cast<T &>(*this), T::size());
   }
 
   /**
@@ -664,11 +663,11 @@ template <typename VectorizedArrayType>
 inline DEAL_II_ALWAYS_INLINE VectorizedArrayType
                              make_vectorized_array(const typename VectorizedArrayType::value_type &u)
 {
-//  static_assert(
-//    std::is_same<VectorizedArrayType,
-//                 VectorizedArray<typename VectorizedArrayType::value_type,
-//                                 VectorizedArrayType::size()>>::value,
-//    "VectorizedArrayType is not a VectorizedArray.");
+  static_assert(
+    std::is_same<VectorizedArrayType,
+                 VectorizedArray<typename VectorizedArrayType::value_type,
+                                 VectorizedArrayType::size()>>::value,
+    "VectorizedArrayType is not a VectorizedArray.");
 
   VectorizedArrayType result = u;
   return result;
@@ -709,9 +708,7 @@ vectorized_load_and_transpose(const unsigned int              n_entries,
                               VectorizedArray<Number, width> *out)
 {
   for (unsigned int i = 0; i < n_entries; ++i)
-    for (unsigned int v = 0;
-         v < VectorizedArray<Number, width>::size();
-         ++v)
+    for (unsigned int v = 0; v < VectorizedArray<Number, width>::size(); ++v)
       out[i][v] = in[offsets[v] + i];
 }
 
@@ -765,15 +762,11 @@ vectorized_transpose_and_store(const bool                            add_into,
 {
   if (add_into)
     for (unsigned int i = 0; i < n_entries; ++i)
-      for (unsigned int v = 0;
-           v < VectorizedArray<Number, width>::size();
-           ++v)
+      for (unsigned int v = 0; v < VectorizedArray<Number, width>::size(); ++v)
         out[offsets[v] + i] += in[i][v];
   else
     for (unsigned int i = 0; i < n_entries; ++i)
-      for (unsigned int v = 0;
-           v < VectorizedArray<Number, width>::size();
-           ++v)
+      for (unsigned int v = 0; v < VectorizedArray<Number, width>::size(); ++v)
         out[offsets[v] + i] = in[i][v];
 }
 
@@ -3774,8 +3767,7 @@ inline DEAL_II_ALWAYS_INLINE bool
 operator==(const VectorizedArray<Number, width> &lhs,
            const VectorizedArray<Number, width> &rhs)
 {
-  for (unsigned int i = 0; i < VectorizedArray<Number, width>::size();
-       ++i)
+  for (unsigned int i = 0; i < VectorizedArray<Number, width>::size(); ++i)
     if (lhs[i] != rhs[i])
       return false;
 
@@ -4451,8 +4443,7 @@ namespace std
     // optimization bug in gcc-4.6 with SSE2 (see also deal.II developers list
     // from April 2014, topic "matrix_free/step-48 Test").
     Number values[::dealii::VectorizedArray<Number, width>::size()];
-    for (unsigned int i = 0;
-         i < dealii::VectorizedArray<Number, width>::size();
+    for (unsigned int i = 0; i < dealii::VectorizedArray<Number, width>::size();
          ++i)
       values[i] = std::sin(x[i]);
     ::dealii::VectorizedArray<Number, width> out;
@@ -4474,8 +4465,7 @@ namespace std
   cos(const ::dealii::VectorizedArray<Number, width> &x)
   {
     Number values[::dealii::VectorizedArray<Number, width>::size()];
-    for (unsigned int i = 0;
-         i < dealii::VectorizedArray<Number, width>::size();
+    for (unsigned int i = 0; i < dealii::VectorizedArray<Number, width>::size();
          ++i)
       values[i] = std::cos(x[i]);
     ::dealii::VectorizedArray<Number, width> out;
@@ -4497,8 +4487,7 @@ namespace std
   tan(const ::dealii::VectorizedArray<Number, width> &x)
   {
     Number values[::dealii::VectorizedArray<Number, width>::size()];
-    for (unsigned int i = 0;
-         i < dealii::VectorizedArray<Number, width>::size();
+    for (unsigned int i = 0; i < dealii::VectorizedArray<Number, width>::size();
          ++i)
       values[i] = std::tan(x[i]);
     ::dealii::VectorizedArray<Number, width> out;
@@ -4520,8 +4509,7 @@ namespace std
   exp(const ::dealii::VectorizedArray<Number, width> &x)
   {
     Number values[::dealii::VectorizedArray<Number, width>::size()];
-    for (unsigned int i = 0;
-         i < dealii::VectorizedArray<Number, width>::size();
+    for (unsigned int i = 0; i < dealii::VectorizedArray<Number, width>::size();
          ++i)
       values[i] = std::exp(x[i]);
     ::dealii::VectorizedArray<Number, width> out;
@@ -4543,8 +4531,7 @@ namespace std
   log(const ::dealii::VectorizedArray<Number, width> &x)
   {
     Number values[::dealii::VectorizedArray<Number, width>::size()];
-    for (unsigned int i = 0;
-         i < dealii::VectorizedArray<Number, width>::size();
+    for (unsigned int i = 0; i < dealii::VectorizedArray<Number, width>::size();
          ++i)
       values[i] = std::log(x[i]);
     ::dealii::VectorizedArray<Number, width> out;
@@ -4582,8 +4569,7 @@ namespace std
   pow(const ::dealii::VectorizedArray<Number, width> &x, const Number p)
   {
     Number values[::dealii::VectorizedArray<Number, width>::size()];
-    for (unsigned int i = 0;
-         i < dealii::VectorizedArray<Number, width>::size();
+    for (unsigned int i = 0; i < dealii::VectorizedArray<Number, width>::size();
          ++i)
       values[i] = std::pow(x[i], p);
     ::dealii::VectorizedArray<Number, width> out;
